@@ -38,6 +38,18 @@ const routes: RouteRecordRaw[] = [
         meta: { title: '入库管理' }
       },
       {
+        path: 'scan-inbound',
+        name: 'ScanInbound',
+        component: () => import('@/views/scan/ScanInbound.vue'),
+        meta: { title: '扫码入库' }
+      },
+      {
+        path: 'scan-outbound',
+        name: 'ScanOutbound',
+        component: () => import('@/views/scan/ScanOutbound.vue'),
+        meta: { title: '扫码出库' }
+      },
+      {
         path: 'outstock',
         name: 'OutStock',
         component: () => import('@/views/inventory/OutStock.vue'),

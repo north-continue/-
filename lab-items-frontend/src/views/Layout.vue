@@ -25,9 +25,17 @@
           <el-icon><Top /></el-icon>
           <span>入库管理</span>
         </el-menu-item>
+        <el-menu-item index="/scan-inbound">
+          <el-icon><Camera /></el-icon>
+          <span>扫码入库</span>
+        </el-menu-item>
         <el-menu-item index="/outstock">
           <el-icon><Bottom /></el-icon>
           <span>出库管理</span>
+        </el-menu-item>
+        <el-menu-item index="/scan-outbound">
+          <el-icon><Camera /></el-icon>
+          <span>扫码出库</span>
         </el-menu-item>
         <el-menu-item index="/borrow">
           <el-icon><Collection /></el-icon>

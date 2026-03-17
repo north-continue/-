@@ -133,3 +133,96 @@ export const getItemByQrCodeApi = (qrCode: string) => {
 export const batchInsertItemsApi = (data: Partial<Item>[]) => {
   return request.post<boolean>('/items/batch', data)
 }
+
+// ============ 扫码出入库接口 ============
+
+export interface ScanInboundParams {
+  itemCode: string
+  quantity: number
+  inType?: string
+  supplier?: string
+  invoiceNo?: string
+  operatorId: number
+  remark?: string
+}
+
+export interface ScanOutboundParams {
+  itemCode: string
+  quantity: number
+  outType?: string
+  receiverId?: number
+  operatorId: number
+  remark?: string
+}
+
+export interface InRecord {
+  recordId: number
+  inNo: string
+  itemId: number
+  quantity: number
+  inType: string
+  supplier: string
+  invoiceNo: string
+  operatorId: number
+  remark: string
+  createTime: string
+}
+
+export interface OutRecord {
+  recordId: number
+  outNo: string
+  itemId: number
+  quantity: number
+  outType: string
+  receiverId: number
+  operatorId: number
+  remark: string
+  createTime: string
+}
+
+/**
+ * 扫码获取物品信息
+ */
+export const scanGetItemApi = (code: string) => {
+  return request.get<Item>(`/scan/item/${code}`)
+}
+
+/**
+ * 扫码入库
+ */
+export const scanInboundApi = (data: ScanInboundParams) => {
+  return request.post<InRecord>('/scan/inbound', data)
+}
+
+/**
+ * 扫码出库
+ */
+export const scanOutboundApi = (data: ScanOutboundParams) => {
+  return request.post<OutRecord>('/scan/outbound', data)
+}
+
+/**
+ * 快速扫码入库
+ */
+export const quickScanInboundApi = (params: {
+  itemCode: string
+  quantity: number
+  operatorId: number
+  supplier?: string
+  remark?: string
+}) => {
+  return request.post<InRecord>('/scan/quick-inbound', null, { params })
+}
+
+/**
+ * 快速扫码出库
+ */
+export const quickScanOutboundApi = (params: {
+  itemCode: string
+  quantity: number
+  operatorId: number
+  receiverId?: number
+  remark?: string
+}) => {
+  return request.post<OutRecord>('/scan/quick-outbound', null, { params })
+}
