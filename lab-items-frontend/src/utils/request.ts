@@ -2,6 +2,10 @@ import axios from 'axios'
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { ElMessage } from 'element-plus'
 import router from '@/router'
+import { mockRequest } from '@/mock'
+
+// 是否使用 Mock 模式（后端不可用时自动启用）
+let useMock = false
 
 // 响应数据接口
 export interface ResponseData<T = any> {
@@ -14,7 +18,7 @@ export interface ResponseData<T = any> {
 // 创建 axios 实例
 const service: AxiosInstance = axios.create({
   baseURL: '/api',
-  timeout: 15000
+  timeout: 5000
 })
 
 // 请求拦截器
@@ -37,11 +41,9 @@ service.interceptors.response.use(
   (response: AxiosResponse<ResponseData>) => {
     const res = response.data
     
-    // 如果返回的状态码不是 200，说明接口有错误
     if (res.code !== 200) {
       ElMessage.error(res.message || '请求失败')
       
-      // 401: 未授权，跳转到登录页
       if (res.code === 401) {
         localStorage.removeItem('token')
         router.push('/login')
@@ -54,6 +56,12 @@ service.interceptors.response.use(
   },
   (error) => {
     console.error('响应错误:', error)
+    
+    // 网络错误时自动切换到 Mock 模式
+    if (error.code === 'ERR_NETWORK' || error.message?.includes('Network Error')) {
+      useMock = true
+      console.log('后端不可用，已切换到 Mock 模式')
+    }
     
     if (error.response) {
       switch (error.response.status) {
@@ -75,28 +83,96 @@ service.interceptors.response.use(
           ElMessage.error(error.response.data?.message || '请求失败')
       }
     } else {
-      ElMessage.error('网络异常，请检查网络连接')
+      ElMessage.error('网络异常，已切换到演示模式')
     }
     
     return Promise.reject(error)
   }
 )
 
+// Mock 请求处理
+async function handleMockRequest(method: string, url: string, params?: any, data?: any): Promise<ResponseData> {
+  const result = mockRequest({
+    url,
+    method,
+    params,
+    data
+  })
+  
+  // 模拟网络延迟
+  await new Promise(resolve => setTimeout(resolve, 100))
+  
+  return {
+    ...result,
+    timestamp: Date.now()
+  }
+}
+
 // 导出请求方法
 export const request = {
-  get<T = any>(url: string, params?: object): Promise<ResponseData<T>> {
-    return service.get(url, { params })
+  async get<T = any>(url: string, params?: object): Promise<ResponseData<T>> {
+    // 如果 Mock 模式已启用，直接使用 Mock 数据
+    if (useMock) {
+      return handleMockRequest('get', url, params)
+    }
+    
+    try {
+      return await service.get(url, { params })
+    } catch (error: any) {
+      // 如果网络错误，切换到 Mock 模式并重试
+      if (error.code === 'ERR_NETWORK' || error.message?.includes('Network Error')) {
+        useMock = true
+        return handleMockRequest('get', url, params)
+      }
+      throw error
+    }
   },
 
-  post<T = any>(url: string, data?: object): Promise<ResponseData<T>> {
-    return service.post(url, data)
+  async post<T = any>(url: string, data?: object, config?: any): Promise<ResponseData<T>> {
+    if (useMock) {
+      return handleMockRequest('post', url, undefined, data)
+    }
+    
+    try {
+      return await service.post(url, data, config)
+    } catch (error: any) {
+      if (error.code === 'ERR_NETWORK' || error.message?.includes('Network Error')) {
+        useMock = true
+        return handleMockRequest('post', url, undefined, data)
+      }
+      throw error
+    }
   },
 
-  put<T = any>(url: string, data?: object): Promise<ResponseData<T>> {
-    return service.put(url, data)
+  async put<T = any>(url: string, data?: object): Promise<ResponseData<T>> {
+    if (useMock) {
+      return handleMockRequest('put', url, undefined, data)
+    }
+    
+    try {
+      return await service.put(url, data)
+    } catch (error: any) {
+      if (error.code === 'ERR_NETWORK' || error.message?.includes('Network Error')) {
+        useMock = true
+        return handleMockRequest('put', url, undefined, data)
+      }
+      throw error
+    }
   },
 
-  delete<T = any>(url: string): Promise<ResponseData<T>> {
-    return service.delete(url)
+  async delete<T = any>(url: string): Promise<ResponseData<T>> {
+    if (useMock) {
+      return handleMockRequest('delete', url)
+    }
+    
+    try {
+      return await service.delete(url)
+    } catch (error: any) {
+      if (error.code === 'ERR_NETWORK' || error.message?.includes('Network Error')) {
+        useMock = true
+        return handleMockRequest('delete', url)
+      }
+      throw error
+    }
   }
 }
