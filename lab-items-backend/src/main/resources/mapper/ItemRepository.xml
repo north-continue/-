@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lab.items.repository.ItemRepository">
+
+    <resultMap id="BaseResultMap" type="com.lab.items.entity.Item">
+        <id column="item_id" property="itemId"/>
+        <result column="item_code" property="itemCode"/>
+        <result column="qr_code" property="qrCode"/>
+        <result column="item_name" property="itemName"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="specification" property="specification"/>
+        <result column="brand" property="brand"/>
+        <result column="unit" property="unit"/>
+        <result column="price" property="price"/>
+        <result column="purchase_date" property="purchaseDate"/>
+        <result column="supplier" property="supplier"/>
+        <result column="location" property="location"/>
+        <result column="lab_room" property="labRoom"/>
+        <result column="shelf" property="shelf"/>
+        <result column="image_url" property="imageUrl"/>
+        <result column="total_quantity" property="totalQuantity"/>
+        <result column="available_quantity" property="availableQuantity"/>
+        <result column="borrowed_quantity" property="borrowedQuantity"/>
+        <result column="min_stock" property="minStock"/>
+        <result column="max_stock" property="maxStock"/>
+        <result column="status" property="status"/>
+        <result column="warranty_period" property="warrantyPeriod"/>
+        <result column="warranty_expiry" property="warrantyExpiry"/>
+        <result column="remark" property="remark"/>
+        <result column="create_user_id" property="createUserId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        item_id, item_code, qr_code, item_name, category_id, specification, brand, unit, 
+        price, purchase_date, supplier, location, lab_room, shelf, image_url, 
+        total_quantity, available_quantity, borrowed_quantity, min_stock, max_stock, 
+        status, warranty_period, warranty_expiry, remark, create_user_id, 
+        create_time, update_time
+    </sql>
+
+    <select id="selectItemPage" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM item
+        <where>
+            <if test="itemName != null and itemName != ''">
+                AND item_name LIKE CONCAT('%', #{itemName}, '%')
+            </if>
+            <if test="categoryId != null">
+                AND category_id = #{categoryId}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+</mapper>

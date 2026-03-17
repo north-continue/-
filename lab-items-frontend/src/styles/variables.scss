@@ -1,0 +1,61 @@
+// 主题颜色
+$primary-color: #409EFF;
+$success-color: #67C23A;
+$warning-color: #E6A23C;
+$danger-color: #F56C6C;
+$info-color: #909399;
+
+// 文字颜色
+$text-primary: #303133;
+$text-regular: #606266;
+$text-secondary: #909399;
+$text-placeholder: #C0C4CC;
+
+// 背景颜色
+$bg-page: #f0f2f5;
+$bg-white: #ffffff;
+$bg-dark: #1d1e1f;
+
+// 边框颜色
+$border-color: #DCDFE6;
+$border-light: #EBEEF5;
+
+// 字体大小
+$font-extra-large: 20px;
+$font-large: 18px;
+$font-medium: 16px;
+$font-base: 14px;
+$font-small: 13px;
+$font-extra-small: 12px;
+
+// 间距
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 12px;
+$spacing-lg: 16px;
+$spacing-xl: 20px;
+$spacing-xxl: 24px;
+
+// 圆角
+$border-radius-small: 2px;
+$border-radius-base: 4px;
+$border-radius-large: 8px;
+$border-radius-round: 20px;
+$border-radius-circle: 50%;
+
+// 阴影
+$box-shadow-base: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+$box-shadow-dark: 0 2px 12px 0 rgba(0, 0, 0, 0.2);
+$box-shadow-light: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+
+// 侧边栏
+$sidebar-width: 220px;
+$sidebar-bg: #304156;
+$header-height: 60px;
+
+// 断点
+$breakpoint-xs: 480px;
+$breakpoint-sm: 768px;
+$breakpoint-md: 992px;
+$breakpoint-lg: 1200px;
+$breakpoint-xl: 1920px;
