@@ -64,12 +64,12 @@ echo   后端服务启动中...
 echo ====================================
 echo.
 echo 请等待 30 秒，然后访问：
-echo http://localhost:8080/api/swagger-ui.html
+echo http://localhost:8084/api/swagger-ui.html
 echo.
 echo 按任意键打开浏览器测试...
 pause >nul
 
-start http://localhost:8080/api/swagger-ui.html
+start http://localhost:8084/api/swagger-ui.html
 
 echo.
 echo 如果页面无法访问，请检查后端服务窗口的日志

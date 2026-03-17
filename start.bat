@@ -66,8 +66,8 @@ echo   服务启动中...
 echo ====================================
 echo.
 echo 📱 前端地址：http://localhost:3000
-echo 🔧 后端地址：http://localhost:8080/api
-echo 📖 API 文档：http://localhost:8080/api/swagger-ui.html
+echo 🔧 后端地址：http://localhost:8084/api
+echo 📖 API 文档：http://localhost:8084/api/swagger-ui.html
 echo.
 echo 默认账号：
 echo   管理员：admin / 123456
